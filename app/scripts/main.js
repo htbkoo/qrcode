@@ -19,6 +19,8 @@
 (function () {
   'use strict';
 
+  const qrClientWorker = new Worker("scripts/qrclient.js");
+
   var QRCodeCamera = function (element) {
     // Controls the Camera and the QRCode Module
 
@@ -46,23 +48,22 @@
     var qrcodeNavigate = root.querySelector(".QRCodeSuccessDialog-navigate");
     var qrcodeIgnore = root.querySelector(".QRCodeSuccessDialog-ignore");
 
-    var client = new QRClient();
-
     var self = this;
 
     this.currentUrl = undefined;
 
-
     this.detectQRCode = function (imageData, callback) {
       callback = callback || function () {
       };
+      qrClientWorker.postMessage(imageData);
+      qrClientWorker.onmessage = function (e) {
+        const result = e.data;
 
-      client.decode(imageData, function (result) {
         if (result !== undefined) {
           self.currentUrl = result;
         }
         callback(result);
-      });
+      };
     };
 
     this.showDialog = function (url) {
@@ -163,7 +164,7 @@
       sx = 0;
       sy = 0;
 
-      // Make the video coordinate space the same as the window. 
+      // Make the video coordinate space the same as the window.
       // size in the longest dimension.
       // Then center and clip. and map back to correct space.
       scaleX = (dWidth / cameraVideo.videoWidth);
