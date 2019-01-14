@@ -146,7 +146,7 @@
         cameraOverlay.style.borderBottomWidth = boxHeightSize + "px";
 
         overlayCoords.x = boxWidthSize;
-        overlayCoords.y = boxHeightSize
+        overlayCoords.y = boxHeightSize;
         overlayCoords.width = cameraCanvas.width - (boxWidthSize * 2);
         overlayCoords.height = cameraCanvas.height - (boxHeightSize * 2);
 
@@ -189,7 +189,9 @@
       drawOverlay(dWidth, dHeight, scaleFactor);
 
       // A frame has been captured.
-      if (self.onframe) self.onframe();
+      if (self.onframe) {
+        self.onframe();
+      }
 
       coordinatesHaveChanged = false;
     };
@@ -206,7 +208,7 @@
 
       var params;
 
-      if (videoSource === undefined && cameras.length == 0) {
+      if (videoSource === undefined && cameras.length === 0) {
         // Because we have no source information, have to assume it user facing.
         params = {video: true};
       } else {
@@ -272,7 +274,7 @@
             }
           }
 
-          if (cameras.length == 1) {
+          if (cameras.length === 1) {
             cameraToggle.style.display = "none";
           }
 
